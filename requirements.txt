@@ -1,0 +1,10 @@
+# BPM Community Dashboard
+streamlit
+pandas
+altair
+plotly.express
+plotly.graph_objects
+gcsfs
+
+# Prediction
+requests
