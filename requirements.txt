@@ -7,3 +7,4 @@ plotly.express==0.4.0
 fsspec==2024.2.0
 # Prediction
 requests
+gcsfs

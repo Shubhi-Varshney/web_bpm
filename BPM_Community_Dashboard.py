@@ -5,7 +5,7 @@ import pandas as pd
 import altair as alt
 import plotly.express as px
 import plotly.graph_objects as go
-# import gcsfs
+import gcsfs
 
 
 #######################
@@ -34,21 +34,21 @@ file_path_analytics = 'data_for_analytics.csv'
 file_path_ml = "cleaned_data_for_ml.csv"
 file_path_cg = "Community Growth.xlsx"
 
-# Create a file system object using gcsfs
-# fs = gcsfs.GCSFileSystem()
+Create a file system object using gcsfs
+fs = gcsfs.GCSFileSystem()
 
-# with fs.open(f'{bucket_name}/{file_path_analytics}') as f:
-#     df_gcs_an = pd.read_csv(f)
+with fs.open(f'{bucket_name}/{file_path_analytics}') as f:
+    df_gcs_an = pd.read_csv(f)
 
-# with fs.open(f'{bucket_name}/{file_path_ml}') as g:
-#     df_gcs_ml = pd.read_csv(g)
+with fs.open(f'{bucket_name}/{file_path_ml}') as g:
+    df_gcs_ml = pd.read_csv(g)
 
-# with fs.open(f'{bucket_name}/{file_path_cg}') as h:
-#     df_gcs_cg = pd.read_excel(h)
+with fs.open(f'{bucket_name}/{file_path_cg}') as h:
+    df_gcs_cg = pd.read_excel(h)
 
-df_gcs_an = pd.read_csv(f'gs://{bucket_name}/{file_path_analytics}')
-df_gcs_ml = pd.read_csv(f'gs://{bucket_name}/{file_path_ml}')
-df_gcs_cg = pd.read_excel(f'gs://{bucket_name}/{file_path_cg}')
+# df_gcs_an = pd.read_csv(f'gs://{bucket_name}/{file_path_analytics}')
+# df_gcs_ml = pd.read_csv(f'gs://{bucket_name}/{file_path_ml}')
+# df_gcs_cg = pd.read_excel(f'gs://{bucket_name}/{file_path_cg}')
 
 
 df_analytics = df_gcs_an
