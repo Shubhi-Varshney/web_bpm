@@ -29,7 +29,7 @@ alt.themes.enable("dark")
 
 
 ### GCS
-bucket_name = 'taxifare_d-hodal'
+bucket_name = 'bpm_bucket'
 file_path_analytics = 'data_for_analytics.csv'
 file_path_ml = "cleaned_data_for_ml.csv"
 file_path_cg = "Community Growth.xlsx"
