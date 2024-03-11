@@ -35,16 +35,21 @@ file_path_ml = "cleaned_data_for_ml.csv"
 file_path_cg = "Community Growth.xlsx"
 
 # Create a file system object using gcsfs
-fs = gcsfs.GCSFileSystem()
+# fs = gcsfs.GCSFileSystem()
 
-with fs.open(f'{bucket_name}/{file_path_analytics}') as f:
-    df_gcs_an = pd.read_csv(f)
+# with fs.open(f'{bucket_name}/{file_path_analytics}') as f:
+#     df_gcs_an = pd.read_csv(f)
 
-with fs.open(f'{bucket_name}/{file_path_ml}') as g:
-    df_gcs_ml = pd.read_csv(g)
+# with fs.open(f'{bucket_name}/{file_path_ml}') as g:
+#     df_gcs_ml = pd.read_csv(g)
 
-with fs.open(f'{bucket_name}/{file_path_cg}') as h:
-    df_gcs_cg = pd.read_excel(h)
+# with fs.open(f'{bucket_name}/{file_path_cg}') as h:
+#     df_gcs_cg = pd.read_excel(h)
+
+df_gcs_an = pd.read_csv(f'gs://{bucket_name}/{file_path_analytics}.csv')
+df_gcs_ml = pd.read_csv(f'gs://{bucket_name}/{file_path_ml}.csv')
+df_gcs_cg = pd.read_excel(f'gs://{bucket_name}/{file_path_cg}.csv')
+
 
 df_analytics = df_gcs_an
 df_reshaped = df_gcs_ml
@@ -168,7 +173,7 @@ with col[1]:
     df_com_growth = pd.DataFrame(dict_growth)
     
     fig_line = go.Figure(data=go.Line(x=df_com_growth["Month"], y=df_com_growth["LinkedIn"], name="LinkedIn", line_color="#F82274"))
-    fig_line.add_scatter(x=df_com_growth["Month"], y=df_com_growth["Mailing list"], name="Mailing list", line_color="#225DFF")
+    fig_line.add_scatter(x=df_com_growth["Month"], y=df_com_growth["Mailing list"], name="Newsletter", line_color="#225DFF")
     fig_line.add_scatter(x=df_com_growth["Month"], y=df_com_growth["Instagram"], name="Instagram", line_color="#00FFE1")
 
 # Update layout to change x-axis labels
