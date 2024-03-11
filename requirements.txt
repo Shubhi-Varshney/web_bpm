@@ -2,9 +2,8 @@
 streamlit
 pandas
 altair
-plotly.express
-plotly.graph_objects
-gcsfs
+plotly
+plotly.express==0.4.0
 
 # Prediction
 requests
