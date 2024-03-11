@@ -5,8 +5,12 @@ import pandas as pd
 import altair as alt
 import plotly.express as px
 import plotly.graph_objects as go
-import gcsfs
+# import gcsfs
+# from google.cloud import storage
 
+
+storage_filename = "models/xgboost_model.joblib"
+local_filename = "model.joblib"
 
 #######################
 # Page configuration
@@ -27,28 +31,55 @@ alt.themes.enable("dark")
 # df_reshaped = pd.read_csv('/home/dhodal/code/Shubhi-Varshney/data-bpm/raw_data/cleaned_data_for_ml.csv')
 # df_analytics = pd.read_csv('/home/dhodal/code/Shubhi-Varshney/data-bpm/raw_data/data_for_analytics.csv')
 
+# storage_filename = "models/xgboost_model.joblib"
+# local_filename = "model.joblib"
+
+# gcs_client = storage.Client()
+# bucket = gcs_client.bucket(bucket_name)
+# blob = bucket.blob(storage_filename)
+# blob.download_to_filename(local_filename)
+
+
+
+# client = storage.Client()
+# bucket = client.bucket(BUCKET_NAME)
+# blob = bucket.blob(storage_filename)
+# blob.download_to_filename(local_filename)
+ 
 
 ### GCS
 bucket_name = 'bpm_bucket'
+
 file_path_analytics = 'data_for_analytics.csv'
 file_path_ml = "cleaned_data_for_ml.csv"
 file_path_cg = "Community Growth.xlsx"
 
-Create a file system object using gcsfs
-fs = gcsfs.GCSFileSystem()
 
-with fs.open(f'{bucket_name}/{file_path_analytics}') as f:
-    df_gcs_an = pd.read_csv(f)
+# gcs_client = storage.Client()
+# bucket = gcs_client.bucket(bucket_name)
+# blob = bucket.blob(storage_filename)
 
-with fs.open(f'{bucket_name}/{file_path_ml}') as g:
-    df_gcs_ml = pd.read_csv(g)
 
-with fs.open(f'{bucket_name}/{file_path_cg}') as h:
-    df_gcs_cg = pd.read_excel(h)
+# f = blob.download_to_filename(file_path_analytics)
+# g = blob.download_to_filename(file_path_ml)
+# h = blob.download_to_filename(file_path_cg)
 
-# df_gcs_an = pd.read_csv(f'gs://{bucket_name}/{file_path_analytics}')
-# df_gcs_ml = pd.read_csv(f'gs://{bucket_name}/{file_path_ml}')
-# df_gcs_cg = pd.read_excel(f'gs://{bucket_name}/{file_path_cg}')
+# # Create a file system object using gcsfs
+
+# # fs = gcsfs.GCSFileSystem()
+
+# # with fs.open(f'{bucket_name}/{file_path_analytics}') as f:
+# df_gcs_an = pd.read_csv(f)
+
+# # with fs.open(f'{bucket_name}/{file_path_ml}') as g:
+# df_gcs_ml = pd.read_csv(g)
+
+# # with fs.open(f'{bucket_name}/{file_path_cg}') as h:
+# df_gcs_cg = pd.read_excel(h)
+
+df_gcs_an = pd.read_csv(f'gs://{bucket_name}/{file_path_analytics}')
+df_gcs_ml = pd.read_csv(f'gs://{bucket_name}/{file_path_ml}')
+df_gcs_cg = pd.read_excel(f'gs://{bucket_name}/{file_path_cg}')
 
 
 df_analytics = df_gcs_an
