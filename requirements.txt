@@ -2,6 +2,7 @@
 streamlit
 pandas
 altair
+plotly
 plotly.express
 plotly.graph_objects
 gcsfs
