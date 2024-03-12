@@ -19,10 +19,11 @@ st.markdown('<p style="text-align: center; font-size: 60px; color: #F171A2;">Pre
 # Function to call predict API
  ## Update URL as needed ##
   ## local:   "http://127.0.0.1:8000/predict" 
-  ## docker:  "https://databpm-y72gx2bd7a-ew.a.run.app/predict"  
-@st.cache_resource
+  ## docker:  "https://databpm-y72gx2bd7a-ew.a.run.app/predict"
+ 
+# @st.cache_resource
 def call_predict_api(payload):
-    url =  "https://databpm-y72gx2bd7a-ew.a.run.app/predict" 
+    url =  "https://databpm-y72gx2bd7a-ew.a.run.app/predict"
     response = requests.post(url, files={"File": payload})
     if response.status_code == 200:
         return response.json()
