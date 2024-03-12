@@ -22,7 +22,7 @@ st.markdown('<p style="text-align: center; font-size: 60px; color: #F171A2;">Pre
   ## docker:  "https://databpm-y72gx2bd7a-ew.a.run.app/predict"  
 @st.cache_resource
 def call_predict_api(payload):
-    url =  "http://127.0.0.1:8000/predict" 
+    url =  "https://databpm-y72gx2bd7a-ew.a.run.app/predict" 
     response = requests.post(url, files={"File": payload})
     if response.status_code == 200:
         return response.json()
