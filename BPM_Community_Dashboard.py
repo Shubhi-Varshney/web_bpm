@@ -70,7 +70,7 @@ df_reshaped = df_gcs_ml
 df_line = df_gcs_cg
 ######################
 # Colors
-color_bpm_logo = '#c'
+
 
 
 #######################
@@ -100,7 +100,11 @@ with st.sidebar:
 # Contents of ~/my_app/main_page.py
 
 col_title = st.columns((2, 6), gap="medium")
-with col_title[1]: 
+with col_title[1]:
+    
+    # with open('css_styles/style.css') as f:
+    #             st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True) 
+    
     st.markdown('<span style="text-align: center; font-size: 50px; color: #519FFF;">BPM Community Dashboard</span>', unsafe_allow_html=True)
 #st.markdown("<h1 style='text-align: center; color: red;'>Some title</h1>", unsafe_allow_html=True)
  # text-align: center;
