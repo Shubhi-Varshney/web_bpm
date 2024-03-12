@@ -45,10 +45,20 @@ file_path_cg = "Community Growth.xlsx"
 
 # with fs.open(f'{bucket_name}/{file_path_cg}') as h:
 #     df_gcs_cg = pd.read_excel(h)
+@st.cache_data
+def load_csv(url):
+    df = pd.read_csv(url)
+    return df
 
-df_gcs_an = pd.read_csv(f'gs://{bucket_name}/{file_path_analytics}')
-df_gcs_ml = pd.read_csv(f'gs://{bucket_name}/{file_path_ml}')
-df_gcs_cg = pd.read_excel(f'gs://{bucket_name}/{file_path_cg}')
+@st.cache_data
+def load_excel(url):
+    df = pd.read_excel(url)
+    return df
+
+
+df_gcs_an = load_csv(f'gs://{bucket_name}/{file_path_analytics}')
+df_gcs_ml = load_csv(f'gs://{bucket_name}/{file_path_ml}')
+df_gcs_cg = load_excel(f'gs://{bucket_name}/{file_path_cg}')
 
 
 df_analytics = df_gcs_an
@@ -70,7 +80,7 @@ with st.sidebar:
 
     event_list = sorted(list(df_analytics.Event.unique()))
 
-    selected_event = st.selectbox('Select an event', event_list)
+    selected_event = st.selectbox('Select an event', event_list, index=5)
 
     # with.st.sidebar.beta_container()
     with st.expander('About', expanded=False):
