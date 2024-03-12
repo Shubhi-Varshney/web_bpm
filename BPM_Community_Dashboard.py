@@ -1,11 +1,12 @@
 #######################
 # Import libraries
 import streamlit as st
+# import streamlit_extras.bottom as ste
 import pandas as pd
 import altair as alt
 import plotly.express as px
 import plotly.graph_objects as go
-import gcsfs
+# import gcsfs
 
 
 #######################
@@ -29,8 +30,11 @@ alt.themes.enable("dark")
 
 
 ### GCS
+# Shubi updated file names: "cleaned_data_for_analysis.csv"
+# "cleaned_data_for_ml.csv"
+
 bucket_name = 'bpm_bucket'
-file_path_analytics = 'data_for_analytics.csv'
+file_path_analytics = "cleaned_data_for_analysis.csv"
 file_path_ml = "cleaned_data_for_ml.csv"
 file_path_cg = "Community Growth.xlsx"
 
@@ -85,9 +89,9 @@ with st.sidebar:
     # with.st.sidebar.beta_container()
     with st.expander('About', expanded=False):
         st.write('''
-            Made with 🖤 from Berlin,\n
-Shubhi Jain, Dominic Hodal, Yulia Vilensky
-            ''')
+                Made with 🖤 from Berlin,\n
+    Shubhi Jain, Dominic Hodal, Yulia Vilensky
+                ''')
 
 
 # (https://www.linkedin.com/in/email-shubhi-jain/)

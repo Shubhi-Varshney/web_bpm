@@ -17,9 +17,12 @@ st.markdown('<p style="text-align: center; font-size: 60px; color: #F171A2;">Pre
 
 
 # Function to call predict API
+ ## Update URL as needed ##
+  ## local:   "http://127.0.0.1:8000/predict" 
+  ## docker:  "https://databpm-y72gx2bd7a-ew.a.run.app/predict"  
 @st.cache_resource
 def call_predict_api(payload):
-    url =   "http://127.0.0.1:8000/predict" # "https://databpm-y72gx2bd7a-ew.a.run.app/predict"  # Update URL as needed
+    url =  "http://127.0.0.1:8000/predict" 
     response = requests.post(url, files={"File": payload})
     if response.status_code == 200:
         return response.json()
@@ -52,4 +55,5 @@ with col_title[1]:
                 prediction = call_predict_api(df_byte)
                 pred_per = round((prediction["probability_to_attend"] * 100), 1)
                 st.markdown(f'''### :green[You are {pred_per}% likely to attend a BPM event]:sunflower:''')
+
 
