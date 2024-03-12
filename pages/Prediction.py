@@ -23,7 +23,7 @@ st.markdown('<p style="text-align: center; font-size: 60px; color: #F171A2;">Pre
  
 # @st.cache_resource
 def call_predict_api(payload):
-    url =  "https://databpm-y72gx2bd7a-ew.a.run.app/predict"
+    url =  "https://databpm2-y72gx2bd7a-ew.a.run.app/predict" 
     response = requests.post(url, files={"File": payload})
     if response.status_code == 200:
         return response.json()
