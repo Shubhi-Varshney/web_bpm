@@ -7,10 +7,10 @@ import plotly.express as px
 import plotly.graph_objects as go
 import requests
 
-COLUMN_NAMES_RAW = [ 'headline','description', 'jobTitle' ,'jobDescription','jobDuration', 'jobDateRange', 'jobTitle2', 'jobDuration2', 'schoolDateRange', 'skill1', 'skill2', 'skill3']
+col_names = ['headline','description', 'jobTitle' ,'jobDescription','jobDuration', 'jobDateRange', 'jobTitle2', 'jobDuration2', 'schoolDateRange', 'skill1', 'skill2', 'skill3']
 
 pred_button = False
-
+col_check = False
 # st.markdown("# Prediction")
 st.sidebar.markdown("# Prediction")
 st.markdown('<p style="text-align: center; font-size: 60px; color: #F171A2;">Predict if someone will attend a BPM event!</p>', unsafe_allow_html=True)
@@ -31,29 +31,36 @@ def call_predict_api(payload):
         return None
 
 
-col_title = st.columns((2, 4, 2), gap="medium")
+col_title = st.columns((1.8, 4.4, 1.8), gap="medium")
+
 
 with col_title[1]: 
     st.markdown('<span style="text-align: center; font-size: 35px; color: #519FFF;">Upload scrapped LinkedIn data here:</span>', unsafe_allow_html=True)
     uploaded_file = st.file_uploader("CSV file", type=["csv"])
     if uploaded_file is not None:
         df = pd.read_csv(uploaded_file)
-        df_col = df[COLUMN_NAMES_RAW]
-        st.markdown(f"{df_col.shape}")
-        if df_col.shape != (1, 12):
-            st.markdown('<p style="text-align: center; font-size: 25px; color: #d8313a;">Please upload a csv file with a single entry</p>', unsafe_allow_html=True)
-            
-        if df_col.shape == (1, 12):
-            pred_button = True
-            df_byte = df_col.to_json().encode()
-            st.write(df)
-    if pred_button == True:   
-        if st.button("Predict"):
-            if uploaded_file is None:
-                st.markdown('<p style="text-align: center; font-size: 30px; color: #d8313a;">Please upload a csv file first</p>', unsafe_allow_html=True)
-            if uploaded_file is not None:
-                prediction = call_predict_api(df_byte)
-                pred_per = round((prediction["probability_to_attend"] * 100), 1)
-                st.markdown(f'''### :green[You are {pred_per}% likely to attend a BPM event]:sunflower:''')
+        for col in col_names:
+            if col not in df.columns:
+                st.markdown('<p style="text-align: center; font-size: 25px; color: #d8313a;">Please upload a csv file scraped from LinkedIn</p>', unsafe_allow_html=True)
+                col_check =True
+                break
+        if col_check == False:
+            df_col = df[col_names]
+            st.markdown(f"Number of entries in csv: {df_col.shape[0]}")
+            if df_col.shape != (1, 12):
+                st.markdown('<p style="text-align: center; font-size: 25px; color: #d8313a;">Please upload a csv file with a single entry</p>', unsafe_allow_html=True)
+                
+            if df_col.shape == (1, 12):
+                pred_button = True
+                df_byte = df_col.to_json().encode()
+                st.write(df)
+        if pred_button == True:   
+            if st.button("Predict"):
+                if uploaded_file is None:
+                    st.markdown('<p style="text-align: center; font-size: 30px; color: #d8313a;">Please upload a csv file first</p>', unsafe_allow_html=True)
+                if uploaded_file is not None:
+                    prediction = call_predict_api(df_byte)
+                    pred_per = round((prediction["probability_to_attend"] * 100), 1)
+                    st.markdown(f'''### :green[This person is {pred_per}% likely to attend a BPM event]:sunflower:''')
 
 
