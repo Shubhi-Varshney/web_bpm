@@ -55,7 +55,7 @@ def load_csv(url):
     df = pd.read_csv(url)
     return df
 
-@st.cache_data(ttl="1d")
+@st.cache_data(ttl=10)
 def load_excel(url, header_num=0):
     df = pd.read_excel(url, header=header_num)
     return df
