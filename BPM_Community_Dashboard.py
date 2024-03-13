@@ -33,6 +33,7 @@ alt.themes.enable("dark")
 # Shubi updated file names: "cleaned_data_for_analysis.csv"
 # "cleaned_data_for_ml.csv"
 
+# https://console.cloud.google.com/storage/browser/bpm_bucket/cleaned_data_for_analysis.csv
 bucket_name = 'bpm_bucket'
 file_path_analytics = "cleaned_data_for_analysis.csv"
 file_path_ml = "cleaned_data_for_ml.csv"
@@ -54,15 +55,15 @@ def load_csv(url):
     df = pd.read_csv(url)
     return df
 
-@st.cache_data
-def load_excel(url):
-    df = pd.read_excel(url)
+@st.cache_data(ttl="1d")
+def load_excel(url, header_num=0):
+    df = pd.read_excel(url, header=header_num)
     return df
 
 
 df_gcs_an = load_csv(f'gs://{bucket_name}/{file_path_analytics}')
 df_gcs_ml = load_csv(f'gs://{bucket_name}/{file_path_ml}')
-df_gcs_cg = load_excel(f'gs://{bucket_name}/{file_path_cg}')
+df_gcs_cg = load_excel(f'gs://{bucket_name}/{file_path_cg}', header_num=1)
 
 
 df_analytics = df_gcs_an
@@ -117,7 +118,27 @@ st.sidebar.markdown("# BPM Community Dashboard")
     #color_theme_list = ['blues', 'cividis', 'greens', 'inferno', 'magma', 'plasma', 'reds', 'rainbow', 'turbo', 'viridis']
     # selected_color_theme = st.selectbox('Select a color theme', color_theme_list)
 
+event_name = df_line['Event Name'].iloc[selected_event]
 
+
+#### test box ####
+# css = '''
+# <style>
+#     .element-container:has(>.stTextArea), .stTextArea {
+#         width: 800px !important;
+#     }
+#     .stTextArea textarea {
+#         height: 400px;
+#     }
+# </style>
+# '''
+
+# response = st.text_area("Type here")
+# st.write(response)
+# st.write(css, unsafe_allow_html=True)
+
+#### element to inject variable
+# st.markdown('<span style="font-size: 30px; color: #04F5C0;">var(--event_name)</span>', unsafe_allow_html=True)
 
 
 #######################
@@ -134,7 +155,7 @@ with col[0]:
     df_event_status = df_event_masked["Attendee Status"].value_counts()
    # attended  = df_event_status["Attending"]
     attended = df_event_status["Checked In"]
-    venue_size = df_line['Venues management '].iloc[selected_event + 1]
+    venue_size = int(df_line['Venue size'].iloc[selected_event])
 
     at_percent_ = (attended / venue_size)*100
     at_percent = round(at_percent_, 1)
@@ -165,18 +186,24 @@ with col[0]:
 
 
 with col[1]:
-    st.markdown('<span style="font-size: 30px; color: #4778FF;">Community Growth</span>', unsafe_allow_html=True)
+    st.markdown('<span style="font-size: 30px; color: #4778FF;">Community Engagement Growth</span>', unsafe_allow_html=True)
 
     # df_line = pd.read_excel("/home/dhodal/code/Shubhi-Varshney/data-bpm/raw_data/Community Growth.xlsx")
-    headers = df_line.iloc[0]
-    df_line_renamed  = pd.DataFrame(df_line.values[1:], columns=headers)
-    df_line_renamed['Newsletter'] = df_line_renamed['Newsletter'].fillna(0)
-    months = ["August", "September", "October", "November", "December", "January", "February", "March"]
+
+    df_line['Newsletter'] = df_line['Newsletter'].fillna(0)
+    df_line['Socials'] = pd.to_datetime(df_line['Socials'], format='%d%b%Y:%H:%M:%S.%f')
+    df_line['month'] = pd.DatetimeIndex(df_line['Socials']).month
+    month_num = int(df_line['month'].iloc[(selected_event+ 1)])
+    
+    months = ["August", "September", "October", "November", "December", "January", "February", "March", "April", "May", "June", "July" ]
+    
+    
+        
     # number
-    list_l = list(df_line_renamed['LinkedIn'].iloc[:(selected_event+ 2)])
-    list_2 = list(df_line_renamed['Newsletter'].iloc[:(selected_event+ 2)])
-    list_3 = list(df_line_renamed['Instagram'].iloc[:(selected_event+ 2)])
-    list_4 = months[:(selected_event + 2)]
+    list_l = list(df_line['LinkedIn'].iloc[:(selected_event+ 1)])
+    list_2 = list(df_line['Newsletter'].iloc[:(selected_event+ 1)])
+    list_3 = list(df_line['Instagram'].iloc[:(selected_event+ 1)])
+    list_4 = months[:(selected_event + 1)]
     # list_l = [25, 50, 135, 230, 670, 950]
     # list_2 = [0, 0, 0, 350, 550, 800]
     # list_3 = [4, 12, 25, 30, 50, 50]
@@ -190,7 +217,7 @@ with col[1]:
     }
     df_com_growth = pd.DataFrame(dict_growth)
     
-    fig_line = go.Figure(data=go.Scatter(x=df_com_growth["Month"], y=df_com_growth["LinkedIn"], name="LinkedIn", line_color="#F82274", mode='lines'))
+    fig_line = go.Figure(data=go.Scatter(x=df_com_growth["Month"], y=df_com_growth["LinkedIn"], name="LinkedIn", line_color="#F82274",))
     fig_line.add_scatter(x=df_com_growth["Month"], y=df_com_growth["Mailing list"], name="Newsletter", line_color="#225DFF")
     fig_line.add_scatter(x=df_com_growth["Month"], y=df_com_growth["Instagram"], name="Instagram", line_color="#00FFE1")
 
@@ -219,7 +246,7 @@ with col[1]:
     cancelled = df_event_status["Not Attending"]
     registered = attended + no_show + cancelled
     # Overbooking ticket capacity
-    event_ticket_opened = df_line['Unnamed: 5'].iloc[selected_event + 1]
+    event_ticket_opened = df_line['Ticket opened'].iloc[selected_event + 1]
     # Registered for event
     san_registered = registered
     # Got event ticket
