@@ -27,13 +27,14 @@ st.markdown('<p style="text-align: center; font-size: 40px; color: #4778FF;">Pre
 
 # Function to call predict API
  ## Update URL as needed ##
-  ## local:   "http://127.0.0.1:8000/predict" 
+  ## local:   "http://127.0.0.1:8000/predict"
   ## docker:  "https://databpm-y72gx2bd7a-ew.a.run.app/predict"
- 
+
 @st.cache_resource
 def call_predict_api(payload):
-    # url =  "https://databpm-dev-13-y72gx2bd7a-ew.a.run.app/predict" 
-    url =  "https://databpm-dev-14-y72gx2bd7a-ew.a.run.app/predict" #"https://databpm-dev-14-y72gx2bd7a-ew.a.run.app/get_similar_users" # 
+    # url =  "https://databpm-dev-13-y72gx2bd7a-ew.a.run.app/predict"
+    # url =  "http://127.0.0.1:8000/predict" #"https://databpm-dev-14-y72gx2bd7a-ew.a.run.app/get_similar_users" #
+    url = "https://databpm-dev-14-y72gx2bd7a-ew.a.run.app/predict"
     response = requests.post(url, files={"File": payload})
     if response.status_code == 200:
         return response.json()
@@ -42,8 +43,9 @@ def call_predict_api(payload):
         return None
 
 def call_fbf_api(payload):
-    url_2 = "https://databpm-dev-14-y72gx2bd7a-ew.a.run.app/get_similar_users"
+    # url_2 = "http://127.0.0.1:8000/get_similar_users"
     # url =  "https://databpm-dev-13-y72gx2bd7a-ew.a.run.app/get_similar_users" ## <-- Change ME
+    url_2 = "https://databpm-dev-14-y72gx2bd7a-ew.a.run.app/get_similar_users"
     response_2 = requests.post(url_2, files={"File": payload})
     if response_2.status_code == 200:
         return response_2.json()
@@ -55,7 +57,7 @@ def call_fbf_api(payload):
 col_title = st.columns((1.8, 4.4, 1.8), gap="medium")
 
 
-with col_title[1]: 
+with col_title[1]:
     st.markdown('<span style="text-align: center; font-size: 35px; color: #519FFF;">Upload scrapped LinkedIn data here:</span>', unsafe_allow_html=True)
     uploaded_file = st.file_uploader("CSV file", type=["csv"])
     if uploaded_file is not None:
@@ -70,12 +72,12 @@ with col_title[1]:
             st.markdown(f"Number of entries in csv: {df_col.shape[0]}")
             if df_col.shape != (1, 12):
                 st.markdown('<p style="text-align: center; font-size: 25px; color: #d8313a;">Please upload a csv file with a single entry</p>', unsafe_allow_html=True)
-                
+
             if df_col.shape == (1, 12):
                 pred_button = True
                 df_byte = df_col.to_json().encode()
                 # st.write(df)
-        if pred_button == True:   
+        if pred_button == True:
             if st.button("Predict"):
                 if uploaded_file is None:
                     st.markdown('<p style="text-align: center; font-size: 30px; color: #d8313a;">Please upload a csv file first</p>', unsafe_allow_html=True)
@@ -84,7 +86,7 @@ with col_title[1]:
                     pred_per = round((prediction["probability_to_attend"] * 100), 1)
                     st.markdown(f'''### :green[This person is {pred_per}% likely to attend a BPM event]:sunflower:''')
 
-        if pred_button == True:   
+        if pred_button == True:
             if st.button("Future Best Buddy"):
                 if uploaded_file is None:
                     st.markdown('<p style="text-align: center; font-size: 30px; color: #d8313a;">Please upload a csv file first</p>', unsafe_allow_html=True)
