@@ -39,17 +39,7 @@ file_path_analytics = "cleaned_data_for_analysis.csv"
 file_path_ml = "cleaned_data_for_ml.csv"
 file_path_cg = "Community Growth.xlsx"
 
-# Create a file system object using gcsfs
-# fs = gcsfs.GCSFileSystem()
 
-# with fs.open(f'{bucket_name}/{file_path_analytics}') as f:
-#     df_gcs_an = pd.read_csv(f)
-
-# with fs.open(f'{bucket_name}/{file_path_ml}') as g:
-#     df_gcs_ml = pd.read_csv(g)
-
-# with fs.open(f'{bucket_name}/{file_path_cg}') as h:
-#     df_gcs_cg = pd.read_excel(h)
 @st.cache_data
 def load_csv(url):
     df = pd.read_csv(url)
@@ -69,9 +59,6 @@ df_gcs_cg = load_excel(f'gs://{bucket_name}/{file_path_cg}', header_num=1)
 df_analytics = df_gcs_an
 df_reshaped = df_gcs_ml
 df_line = df_gcs_cg
-######################
-# Colors
-
 
 
 #######################
@@ -100,53 +87,25 @@ with st.sidebar:
 
 # Contents of ~/my_app/main_page.py
 
-col_title = st.columns((2, 6), gap="medium")
+col_title = st.columns((1 ,6), gap="small")
 with col_title[1]:
+    st.markdown('<span style="text-align: center; font-size: 50px; color: #000F40;">Berlin Product Managers |  Community Dashboard</span>', unsafe_allow_html=True)
     
-    # with open('css_styles/style.css') as f:
-    #             st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True) 
+
     
-    st.markdown('<span style="text-align: center; font-size: 50px; color: #519FFF;">BPM Community Dashboard</span>', unsafe_allow_html=True)
-#st.markdown("<h1 style='text-align: center; color: red;'>Some title</h1>", unsafe_allow_html=True)
- # text-align: center;
 st.sidebar.markdown("# BPM Community Dashboard")
 
 
-#    df_selected_event = df_reshaped[df_reshaped.event == selected_event]
-#    df_selected_event_sorted = df_selected_event.sort_values(by="population", ascending=False) # <-- to be changed
-
-    #color_theme_list = ['blues', 'cividis', 'greens', 'inferno', 'magma', 'plasma', 'reds', 'rainbow', 'turbo', 'viridis']
-    # selected_color_theme = st.selectbox('Select a color theme', color_theme_list)
 
 event_name = df_line['Event Name'].iloc[selected_event]
 
 
-#### test box ####
-# css = '''
-# <style>
-#     .element-container:has(>.stTextArea), .stTextArea {
-#         width: 800px !important;
-#     }
-#     .stTextArea textarea {
-#         height: 400px;
-#     }
-# </style>
-# '''
-
-# response = st.text_area("Type here")
-# st.write(response)
-# st.write(css, unsafe_allow_html=True)
-
-#### element to inject variable
-# st.markdown('<span style="font-size: 30px; color: #04F5C0;">var(--event_name)</span>', unsafe_allow_html=True)
-
-
 #######################
 # Dashboard Main Panel
-col = st.columns((2, 4, 2), gap='small')
+col = st.columns((3, 4, 2.5), gap='large',)
 
 with col[0]:
-    st.markdown('<span style="font-size: 30px; color: #04F5C0;">Event Attendance</span>', unsafe_allow_html=True)
+    st.markdown('<span style="font-size: 30px; color: #383971;">Event Attendance</span>', unsafe_allow_html=True)
      #st.markdown("<h1 style='text-align: center; color: red;'>Some title</h1>", unsafe_allow_html=True)
            
     
@@ -171,51 +130,46 @@ st.markdown('#')
 st.markdown('#') 
 
 with col[0]:
-    # st.markdown('<span style="font-size: 30px; color: #04F5C0;">Participant Role Breakdown</span>', unsafe_allow_html=True)
+    st.markdown('<span style="font-size: 30px; color: #383971;">Participant Breakdown</span>', unsafe_allow_html=True)
 
     mask = df_analytics["Event"] == selected_event
     df_analytics_masked = df_analytics[mask]
     df_job_position = pd.DataFrame(df_analytics_masked["Your Job Position"].value_counts().reset_index())
     
-    pie_colors = ["#81D3C1", "#717c89","#8aa2a9","#90baad","#a1e5ab","#adf6b1", "#C1F9C4"] # ["#0000db","#FF3A06","#5E57FF", "#F23CA6", "#FF9535", "#4BFF36", "#02FEE4"] #  "#1c0159","#22016d","#b697ff","#d3c0ff","#9362ff","#a881ff"
+    pie_colors =  ["#81D3C1", "#717c89","#8aa2a9","#90baad","#a1e5ab","#adf6b1", "#C1F9C4"]
     
     fig_pie = px.pie(df_job_position, values='count', names='Your Job Position', ) # 
-    fig_pie.update_layout(showlegend=True, title= dict(text =str("Participant Role Breakdown"), font =dict(family="source sans pro", size=20, color = '#04F5C0')))
+    fig_pie.update_layout(showlegend=True, title= dict(text =str("Role"), font =dict(family="source sans pro", size=20, color = '#383971')))
     fig_pie.update_traces(hoverinfo='label+percent',
                   marker=dict(colors=pie_colors, ))
   
     st.plotly_chart(fig_pie, use_container_width=True,sharing="streamlit", )
 
 
-########## FIX ME!!! #################################################################################
-######################################################################################################
+    pod_mask = df_analytics_masked["Your Job Position"] == "Product"
+    df_analytics_masked["Your Job Position"] = df_analytics_masked["Your Job Position"].fillna("Not given")
+    df_seniority = df_analytics_masked[pod_mask]
+    df_seniority["Choose your role"].value_counts()
+    df_pod_list = pd.DataFrame(df_seniority["Choose your role"].value_counts().reset_index())
 
-# fig_bar = go.Figure()
-# fig_bar.add_trace(go.Bar(name='Product A', x=df['Time'], y=df['Product A']*100, marker_color='#003E69'))
-# fig_bar.add_trace(go.Bar(name='Product B', x=df['Time'], y=df['Product B']*100, marker_color='#ED7D31'))
-# fig_bar.add_trace(go.Bar(name='Product C', x=df['Time'], y=df['Produc C']*100, marker_color='#A5A5A5'))
-# fig_bar.add_hline(y=90, line_dash="dot", line_color='red')
-# # Change the bar mode
-# fig_bar.update_layout(barmode='group', 
-#                   template='plotly_white', 
-#                   legend=dict(orientation='h', x=0.3), 
-#                   title={
-#                       'text': "Products",
-#                       'y':0.9,
-#                       'x':0.5,
-#                       'xanchor': 'center',
-#                       'yanchor': 'top'})
-# fig_bar.update_xaxes(type='category')
-# fig_bar.update_yaxes(range=[80,105], ticksuffix="%")
 
-# st.plotly_chart(fig_pie, use_container_width=True,sharing="streamlit", )
+   #  st.markdown('<span style="font-size: 30px; color: #383971;">Seniority Breakdown</span>', unsafe_allow_html=True)
+    
+    pie_colors_2 =   ["#00C895","#39DEB6","#00B5B5", "#008AAB","#005F92",] # ["#005F92","#008AAB","#00B5B5", "#39DEB6","#00C895",]
+    
+    fig_pie_2 = px.pie(df_pod_list.iloc[:5], values='count', names='Choose your role', ) # 
+    fig_pie_2.update_layout(showlegend=True, title= dict(text =str("Seniority"), font =dict(family="source sans pro", size=20, color = '#383971')))
+    fig_pie_2.update_traces(hoverinfo='label+percent',
+                  marker=dict(colors=pie_colors_2, ))
+  
+    st.plotly_chart(fig_pie_2, use_container_width=True,sharing="streamlit", )
+
 
 
 
 with col[1]:
-    st.markdown('<span style="font-size: 30px; color: #4778FF;">Community Engagement Growth</span>', unsafe_allow_html=True)
+    st.markdown('<span style="font-size: 30px; color: #4778FF;">Social Media Growth</span>', unsafe_allow_html=True)
 
-    # df_line = pd.read_excel("/home/dhodal/code/Shubhi-Varshney/data-bpm/raw_data/Community Growth.xlsx")
 
     df_line['Newsletter'] = df_line['Newsletter'].fillna(0)
     df_line['Socials'] = pd.to_datetime(df_line['Socials'], format='%d%b%Y:%H:%M:%S.%f')
@@ -224,17 +178,12 @@ with col[1]:
     
     months = ["August", "September", "October", "November", "December", "January", "February", "March", "April", "May", "June", "July" ]
     
-    
-        
-    # number
+
     list_l = list(df_line['LinkedIn'].iloc[:(selected_event+ 1)])
     list_2 = list(df_line['Newsletter'].iloc[:(selected_event+ 1)])
     list_3 = list(df_line['Instagram'].iloc[:(selected_event+ 1)])
     list_4 = months[:(selected_event + 1)]
-    # list_l = [25, 50, 135, 230, 670, 950]
-    # list_2 = [0, 0, 0, 350, 550, 800]
-    # list_3 = [4, 12, 25, 30, 50, 50]
-    # list_4 = [1, 2, 3, 4, 5, 6]
+  
     
     dict_growth = {
         "LinkedIn": list_l,
@@ -244,9 +193,9 @@ with col[1]:
     }
     df_com_growth = pd.DataFrame(dict_growth)
     
-    fig_line = go.Figure(data=go.Scatter(x=df_com_growth["Month"], y=df_com_growth["LinkedIn"], name="LinkedIn", line_color="#F82274",))
-    fig_line.add_scatter(x=df_com_growth["Month"], y=df_com_growth["Mailing list"], name="Newsletter", line_color="#225DFF")
-    fig_line.add_scatter(x=df_com_growth["Month"], y=df_com_growth["Instagram"], name="Instagram", line_color="#00FFE1")
+    fig_line = go.Figure(data=go.Scatter(x=df_com_growth["Month"], y=df_com_growth["LinkedIn"], name="LinkedIn🏂", line_color="#0A66C2",))
+    fig_line.add_scatter(x=df_com_growth["Month"], y=df_com_growth["Mailing list"], name="Newsletter", line_color="#F76519")
+    fig_line.add_scatter(x=df_com_growth["Month"], y=df_com_growth["Instagram"], name="Instagram", line_color="#E1306C")
 
 # Update layout to change x-axis labels
     fig_line.update_layout(xaxis=dict(
@@ -256,17 +205,12 @@ with col[1]:
   
     st.plotly_chart(fig_line, use_container_width=True,)
     
-#     st.line_chart(
-#    df_com_growth, x="Month", y=["LinkedIn", "M", "Instagram"], color=["#FF0000", "#0000FF", "#00FF00"]  # Optional
-# )
-    
 
 
 with col[1]:
     st.markdown('<span style="font-size: 30px; color: #4778FF;">Registration Flow</span>', unsafe_allow_html=True)
      
-    # event_mask = df_analytics["Event"] == selected_event
-    # df_event_masked = df_analytics[event_mask]
+
     df_event_status = df_event_masked["Attendee Status"].value_counts()
     attended  = df_event_status["Checked In"]
     no_show  = df_event_status["Attending"]
@@ -293,11 +237,13 @@ with col[1]:
     source = [0, 0, 1, 1, 2, 3, 3]
     target = [1, 2, 3, 4, 3, 5, 6]
     value = [san_registered, event_ticket_opened, san_wait_list, confirmed, cancelled, admitted, no_show]
-   # value = [204, 91, 113, 90, 48, 71, 18] 
+
     
     color_san = ["#00487c","#4bb3fd","#3e6680","#0496ff", "#F82274", "#00FFE1", "#225DFF",]
     
-    link= dict(source = source, target = target, value = value, color="#90BAAD")
+   # colors from pie chart -  ["#81D3C1", "#717c89","#8aa2a9","#90baad","#a1e5ab","#adf6b1", "#C1F9C4"] 
+    
+    link= dict(source = source, target = target, value = value, color="#90baad")
     node = dict(label = label, pad = 35, thickness = 10, color=color_san)
     data = go.Sankey(link = link, node = node)
 
@@ -314,7 +260,7 @@ with col[1]:
 
 with col[2]:
     df_attendees = pd.DataFrame(df_reshaped["company"].value_counts().reset_index())
-    st.markdown('<span style="font-size: 30px; color: #F171A2;">Top Companies</span>', unsafe_allow_html=True)
+    st.markdown('<span style="font-size: 30px; color: #383971;">Top Companies</span>', unsafe_allow_html=True)
 
     st.dataframe(df_attendees,
                  column_order=("company", "count"),
