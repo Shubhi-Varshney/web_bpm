@@ -143,7 +143,7 @@ event_name = df_line['Event Name'].iloc[selected_event]
 
 #######################
 # Dashboard Main Panel
-col = st.columns((2, 4, 2), gap='medium')
+col = st.columns((2, 4, 2), gap='small')
 
 with col[0]:
     st.markdown('<span style="font-size: 30px; color: #04F5C0;">Event Attendance</span>', unsafe_allow_html=True)
@@ -161,14 +161,17 @@ with col[0]:
     at_percent = round(at_percent_, 1)
 
     col1, col2, col3 = st.columns(3)
-    col1.metric("$\large Attendance$", f"{attended}")
-    col2.metric("$\large Venue$", f"{venue_size}")
-    col3.metric("$\large Conversion$", f"{at_percent}%")
+    col1.metric("Total Participants", f"{attended}")
+    col2.metric("Venue Capacity", f"{venue_size}")
+    col3.metric("Attandance Rate", f"{at_percent}%")
 
-
+st.markdown('#') 
+st.markdown('#') 
+st.markdown('#') 
+st.markdown('#') 
 
 with col[0]:
-    st.markdown('<span style="font-size: 30px; color: #04F5C0;">Attendee Breakdown</span>', unsafe_allow_html=True)
+    # st.markdown('<span style="font-size: 30px; color: #04F5C0;">Participant Role Breakdown</span>', unsafe_allow_html=True)
 
     mask = df_analytics["Event"] == selected_event
     df_analytics_masked = df_analytics[mask]
@@ -177,11 +180,35 @@ with col[0]:
     pie_colors = ["#81D3C1", "#717c89","#8aa2a9","#90baad","#a1e5ab","#adf6b1", "#C1F9C4"] # ["#0000db","#FF3A06","#5E57FF", "#F23CA6", "#FF9535", "#4BFF36", "#02FEE4"] #  "#1c0159","#22016d","#b697ff","#d3c0ff","#9362ff","#a881ff"
     
     fig_pie = px.pie(df_job_position, values='count', names='Your Job Position', ) # 
-    fig_pie.update_layout(showlegend=False, )
+    fig_pie.update_layout(showlegend=True, title= dict(text =str("Participant Role Breakdown"), font =dict(family="source sans pro", size=20, color = '#04F5C0')))
     fig_pie.update_traces(hoverinfo='label+percent',
                   marker=dict(colors=pie_colors, ))
   
     st.plotly_chart(fig_pie, use_container_width=True,sharing="streamlit", )
+
+
+########## FIX ME!!! #################################################################################
+######################################################################################################
+
+# fig_bar = go.Figure()
+# fig_bar.add_trace(go.Bar(name='Product A', x=df['Time'], y=df['Product A']*100, marker_color='#003E69'))
+# fig_bar.add_trace(go.Bar(name='Product B', x=df['Time'], y=df['Product B']*100, marker_color='#ED7D31'))
+# fig_bar.add_trace(go.Bar(name='Product C', x=df['Time'], y=df['Produc C']*100, marker_color='#A5A5A5'))
+# fig_bar.add_hline(y=90, line_dash="dot", line_color='red')
+# # Change the bar mode
+# fig_bar.update_layout(barmode='group', 
+#                   template='plotly_white', 
+#                   legend=dict(orientation='h', x=0.3), 
+#                   title={
+#                       'text': "Products",
+#                       'y':0.9,
+#                       'x':0.5,
+#                       'xanchor': 'center',
+#                       'yanchor': 'top'})
+# fig_bar.update_xaxes(type='category')
+# fig_bar.update_yaxes(range=[80,105], ticksuffix="%")
+
+# st.plotly_chart(fig_pie, use_container_width=True,sharing="streamlit", )
 
 
 

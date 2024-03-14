@@ -7,6 +7,15 @@ import plotly.express as px
 import plotly.graph_objects as go
 import requests
 
+# def load_custom_css(file_path):
+#     with open(file_path) as f:
+#         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+# load_custom_css('css_styles/style.css')
+
+# st.write('<div id="cubed_2">hi again</div>', unsafe_allow_html=True)
+
+
+
 col_names = ['headline','description', 'jobTitle' ,'jobDescription','jobDuration', 'jobDateRange', 'jobTitle2', 'jobDuration2', 'schoolDateRange', 'skill1', 'skill2', 'skill3']
 
 pred_button = False
@@ -21,14 +30,25 @@ st.markdown('<p style="text-align: center; font-size: 60px; color: #F171A2;">Pre
   ## local:   "http://127.0.0.1:8000/predict" 
   ## docker:  "https://databpm-y72gx2bd7a-ew.a.run.app/predict"
  
-# @st.cache_resource
+@st.cache_resource
 def call_predict_api(payload):
-    url =  "https://databpm2-y72gx2bd7a-ew.a.run.app/predict" 
+    # url =  "https://databpm-dev-13-y72gx2bd7a-ew.a.run.app/predict" 
+    url =  "https://databpm-dev-14-y72gx2bd7a-ew.a.run.app/predict" #"https://databpm-dev-14-y72gx2bd7a-ew.a.run.app/get_similar_users" # 
     response = requests.post(url, files={"File": payload})
     if response.status_code == 200:
         return response.json()
     else:
         st.error(f"Prediction failed with status code {response.status_code}")
+        return None
+
+def call_fbf_api(payload):
+    url_2 = "https://databpm-dev-14-y72gx2bd7a-ew.a.run.app/get_similar_users"
+    # url =  "https://databpm-dev-13-y72gx2bd7a-ew.a.run.app/get_similar_users" ## <-- Change ME
+    response_2 = requests.post(url_2, files={"File": payload})
+    if response_2.status_code == 200:
+        return response_2.json()
+    else:
+        st.error(f"Prediction failed with status code {response_2.status_code}")
         return None
 
 
@@ -54,7 +74,7 @@ with col_title[1]:
             if df_col.shape == (1, 12):
                 pred_button = True
                 df_byte = df_col.to_json().encode()
-                st.write(df)
+                # st.write(df)
         if pred_button == True:   
             if st.button("Predict"):
                 if uploaded_file is None:
@@ -64,4 +84,15 @@ with col_title[1]:
                     pred_per = round((prediction["probability_to_attend"] * 100), 1)
                     st.markdown(f'''### :green[This person is {pred_per}% likely to attend a BPM event]:sunflower:''')
 
-
+        if pred_button == True:   
+            if st.button("Future Best Buddy"):
+                if uploaded_file is None:
+                    st.markdown('<p style="text-align: center; font-size: 30px; color: #d8313a;">Please upload a csv file first</p>', unsafe_allow_html=True)
+                if uploaded_file is not None:
+                    fbf_prediction = call_fbf_api(df_byte)
+                    pred_fbf = pd.read_json(fbf_prediction)
+                    st.markdown(f"{pred_fbf}")
+                    # friend_list = []
+                    # for i in range(len(pred_fbf.index + 1)):
+                    #     friend_list.append(pred_fbf.iloc[i][0]['jobTitle'])
+                    # st.markdown(f'''### :yellow[These are your future best friends:{freind_list}:sun:''')
