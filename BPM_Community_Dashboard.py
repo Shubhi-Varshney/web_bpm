@@ -193,7 +193,7 @@ with col[1]:
     }
     df_com_growth = pd.DataFrame(dict_growth)
     
-    fig_line = go.Figure(data=go.Scatter(x=df_com_growth["Month"], y=df_com_growth["LinkedIn"], name="LinkedIn🏂", line_color="#0A66C2",))
+    fig_line = go.Figure(data=go.Scatter(x=df_com_growth["Month"], y=df_com_growth["LinkedIn"], name="LinkedInS", line_color="#0A66C2",))
     fig_line.add_scatter(x=df_com_growth["Month"], y=df_com_growth["Mailing list"], name="Newsletter", line_color="#F76519")
     fig_line.add_scatter(x=df_com_growth["Month"], y=df_com_growth["Instagram"], name="Instagram", line_color="#E1306C")
 
