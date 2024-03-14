@@ -58,7 +58,7 @@ col_title = st.columns((1.8, 4.4, 1.8), gap="medium")
 
 
 with col_title[1]:
-    st.markdown('<span style="text-align: center; font-size: 35px; color: #519FFF;">Upload scrapped LinkedIn data here:</span>', unsafe_allow_html=True)
+    st.markdown('<span style="text-align: center; font-size: 35px; color: #519FFF;">Upload LinkedIn data here:</span>', unsafe_allow_html=True)
     uploaded_file = st.file_uploader("CSV file", type=["csv"])
     if uploaded_file is not None:
         df = pd.read_csv(uploaded_file)
