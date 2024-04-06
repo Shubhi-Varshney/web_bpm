@@ -22,7 +22,7 @@ pred_button = False
 col_check = False
 # st.markdown("# Prediction")
 st.sidebar.markdown("# Prediction")
-st.markdown('<p style="text-align: center; font-size: 60px; color: #F171A2;">Predict if someone will attend a BPM event!</p>', unsafe_allow_html=True)
+st.markdown('<p style="text-align: center; font-size: 40px; color: #4778FF;">Predict if someone will attend a BPM event, and suggest 10 people to network with</p>', unsafe_allow_html=True)
 
 
 # Function to call predict API
@@ -58,7 +58,7 @@ col_title = st.columns((1.8, 4.4, 1.8), gap="medium")
 
 
 with col_title[1]:
-    st.markdown('<span style="text-align: center; font-size: 35px; color: #519FFF;">Upload scrapped LinkedIn data here:</span>', unsafe_allow_html=True)
+    st.markdown('<span style="text-align: center; font-size: 35px; color: #519FFF;">Upload LinkedIn data here:</span>', unsafe_allow_html=True)
     uploaded_file = st.file_uploader("CSV file", type=["csv"])
     if uploaded_file is not None:
         df = pd.read_csv(uploaded_file)
@@ -95,8 +95,3 @@ with col_title[1]:
                     pred_fbf = pd.read_json(fbf_prediction)
                     pred_fbf.index.name = "User_ID"
                     st.write(pred_fbf)
-                    # st.markdown(f"{pred_fbf}")
-                    # friend_list = []
-                    # for i in range(len(pred_fbf.index + 1)):
-                    #     friend_list.append(pred_fbf.iloc[i][0]['jobTitle'])
-                    # st.markdown(f'''### :yellow[These are your future best friends:{freind_list}:sun:''')
