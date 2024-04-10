@@ -46,17 +46,48 @@ if not check_password():
 #################
 # Internal page code
 
-# def load_custom_css(file_path):
-#     with open(file_path) as f:
-#         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
-# load_custom_css('css_styles/style.css')
 
-# st.write('<div id="cubed_2">hi again</div>', unsafe_allow_html=True)
 
-df_reshaped = pd.read_csv('/home/dhodal/code/Shubhi-Varshney/data-bpm/raw_data/cleaned_data_for_ml.csv')
-df_analytics = pd.read_csv('/home/dhodal/code/Shubhi-Varshney/data-bpm/raw_data/data_for_analytics.csv')
-df_line = pd.read_excel('/home/dhodal/code/Shubhi-Varshney/data-bpm/raw_data/Community Growth.xlsx', header = 1)
-df_events = pd.read_excel('/home/dhodal/code/Shubhi-Varshney/data-bpm/raw_data/BPM Events list people .xlsx')
+#####################
+# Local
+# df_reshaped = pd.read_csv('/home/dhodal/code/Shubhi-Varshney/data-bpm/raw_data/cleaned_data_for_ml.csv')
+# df_analytics = pd.read_csv('/home/dhodal/code/Shubhi-Varshney/data-bpm/raw_data/data_for_analytics.csv')
+# df_line = pd.read_excel('/home/dhodal/code/Shubhi-Varshney/data-bpm/raw_data/Community Growth.xlsx', header = 1)
+# df_events = pd.read_excel('/home/dhodal/code/Shubhi-Varshney/data-bpm/raw_data/BPM Events list people .xlsx')
+
+# GCS
+
+### GCS
+
+
+# https://console.cloud.google.com/storage/browser/bpm_bucket/cleaned_data_for_analysis.csv
+bucket_name = 'bpm_buckt'
+file_path_analytics = "cleaned_data_for_analysis.csv"
+file_path_ml = "cleaned_data_for_ml.csv"
+file_path_cg = "Community Growth.xlsx"
+file_path_ev = "BPM Events list people .xlsx"
+
+@st.cache_data
+def load_csv(url):
+    df = pd.read_csv(url)
+    return df
+
+@st.cache_data(ttl="1d")
+def load_excel(url, header_num=0):
+    df = pd.read_excel(url, header=header_num)
+    return df
+
+
+df_gcs_an = load_csv(f'gs://{bucket_name}/{file_path_analytics}')
+df_gcs_ml = load_csv(f'gs://{bucket_name}/{file_path_ml}')
+df_gcs_cg = load_excel(f'gs://{bucket_name}/{file_path_cg}', header_num=1)
+df_gcs_ev = load_excel(f'gs://{bucket_name}/{file_path_ev}')
+
+df_analytics = df_gcs_an
+df_reshaped = df_gcs_ml
+df_line = df_gcs_cg
+df_events = df_gcs_ev
+
 
 # Sidebar
 

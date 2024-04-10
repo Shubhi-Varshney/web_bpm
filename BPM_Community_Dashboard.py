@@ -1,6 +1,5 @@
 #######################
 import streamlit as st
-# import streamlit_extras.bottom as ste
 import pandas as pd
 import altair as alt
 import plotly.express as px
@@ -23,13 +22,12 @@ alt.themes.enable("dark")
 # Load data
 
 ### Local
-df_reshaped = pd.read_csv('/home/dhodal/code/Shubhi-Varshney/data-bpm/raw_data/cleaned_data_for_ml.csv')
-df_analytics = pd.read_csv('/home/dhodal/code/Shubhi-Varshney/data-bpm/raw_data/data_for_analytics.csv')
-df_line = pd.read_excel('/home/dhodal/code/Shubhi-Varshney/data-bpm/raw_data/Community Growth.xlsx', header = 1)
+# df_reshaped = pd.read_csv('/home/dhodal/code/Shubhi-Varshney/data-bpm/raw_data/cleaned_data_for_ml.csv')
+# df_analytics = pd.read_csv('/home/dhodal/code/Shubhi-Varshney/data-bpm/raw_data/data_for_analytics.csv')
+# df_line = pd.read_excel('/home/dhodal/code/Shubhi-Varshney/data-bpm/raw_data/Community Growth.xlsx', header = 1)
 
 ### GCS
-# Shubi updated file names: "cleaned_data_for_analysis.csv"
-# "cleaned_data_for_ml.csv"
+
 
 # https://console.cloud.google.com/storage/browser/bpm_bucket/cleaned_data_for_analysis.csv
 bucket_name = 'bpm_buckt'
@@ -49,14 +47,14 @@ def load_excel(url, header_num=0):
     return df
 
 
-# df_gcs_an = load_csv(f'gs://{bucket_name}/{file_path_analytics}')
-# df_gcs_ml = load_csv(f'gs://{bucket_name}/{file_path_ml}')
-# df_gcs_cg = load_excel(f'gs://{bucket_name}/{file_path_cg}', header_num=1)
+df_gcs_an = load_csv(f'gs://{bucket_name}/{file_path_analytics}')
+df_gcs_ml = load_csv(f'gs://{bucket_name}/{file_path_ml}')
+df_gcs_cg = load_excel(f'gs://{bucket_name}/{file_path_cg}', header_num=1)
 
 
-# df_analytics = df_gcs_an
-# df_reshaped = df_gcs_ml
-# df_line = df_gcs_cg
+df_analytics = df_gcs_an
+df_reshaped = df_gcs_ml
+df_line = df_gcs_cg
 
 
 #######################
