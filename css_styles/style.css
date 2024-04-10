@@ -1,0 +1,61 @@
+body {
+  min-height: 200px;
+  height: 100vh;
+  position: relative;
+  background-color: #0ff;
+}
+#cubed {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 20em;
+  height: 7em;
+  margin-left: -9em;
+  margin-top: -1.5em;
+  background: linear-gradient(#f0f, #f0f) 2em 1em /2em 1em, linear-gradient(#f0f 1em, #ffc0cb 3em) 1em 2em/1em 4em, linear-gradient(#f0f, #f0f) 4em 2em/1em 1em, linear-gradient(#ffc0cb, #ffc0cb) 4em 5em/1em 1em, linear-gradient(#ffc0cb, #ffc0cb) 2em 6em /2em 1em, linear-gradient(45deg, rgba(0,0,255,0) 0.7em, #00f 0.7em, #00f 2.12em, rgba(0,0,255,0) 2.12em) 1em 0 /3em 1em, linear-gradient(45deg, rgba(0,0,255,0) 0.7em, #00f 0.7em, #00f 1.4em, rgba(0,0,255,0) 1.4em) 0 1em /2em 1em, linear-gradient(45deg, #00f 0.7em, rgba(0,0,255,0) 0.7em) 4em 1em/1em 1em, linear-gradient(45deg, rgba(0,0,255,0) 0.7em, #00f 0.7em, #00f 2.12em, rgba(0,0,255,0) 2.12em) 1em 5em /3em 1em, linear-gradient(45deg, rgba(0,0,255,0) 0.7em, #00f 0.7em, #00f 1.4em, rgba(0,0,255,0) 1.4em) 3em 4em /2em 1em, linear-gradient(45deg, rgba(0,0,128,0) 0.7em, #000080 0.7em, #000080 3.7em, rgba(0,0,128,0) 3.7em) 0 1em/1em 5em, linear-gradient(#000080, #000080) 1em 0/1em 2em, linear-gradient(45deg, rgba(0,0,128,0) 0.7em, #000080 0.7em, #000080 3.7em, rgba(0,0,128,0) 3.7em) 1em 6em/1em 1em, linear-gradient(#000080, #000080) 3em 4em/1em 2em, linear-gradient(#f0f 2em, #ffc0cb 4em) 6em 1em/1em 5em, linear-gradient(#ffc0cb, #ffc0cb) 7em 6em /2em 1em, linear-gradient(#f0f 2em, #ffc0cb 4em) 9em 1em/1em 5em, linear-gradient(45deg, rgba(0,0,255,0) 0.7em, #00f 0.7em, #00f 1.4em, rgba(0,0,255,0) 1.4em) 5em 0 /2em 1em, linear-gradient(45deg, rgba(0,0,255,0) 0.7em, #00f 0.7em, #00f 1.4em, rgba(0,0,255,0) 1.4em) 8em 0 /2em 1em, linear-gradient(45deg, rgba(0,0,255,0) 0.7em, #00f 0.7em, #00f 2.12em, rgba(0,0,255,0) 2.12em) 6em 5em /3em 1em, linear-gradient(45deg, rgba(0,0,128,0) 0.7em, #000080 0.7em, #000080 4.7em, rgba(0,0,128,0) 4.7em) 5em 0/1em 6em, linear-gradient(45deg, rgba(0,0,128,0) 0.7em, #000080 0.7em, #000080 4.7em, rgba(0,0,128,0) 4.7em) 8em 0/1em 6em, linear-gradient(45deg, rgba(0,0,128,0) 0.7em, #000080 0.7em, #000080 3.7em, rgba(0,0,128,0) 3.7em) 6em 6em/1em 1em, linear-gradient(#f0f 2em, #ffc0cb 4em) 11em 1em/1em 6em, linear-gradient(#f0f, #f0f) 11em 1em /3em 1em, linear-gradient(#f0f, #f0f) 14em 2em/1em 1em, linear-gradient(#f0f, #ffc0cb 2em) 11em 3em /3em 1em, linear-gradient(#f600f6, #ffc0cb 1.6em) 14em 4em/1em 2em, linear-gradient(#ffc0cb, #ffc0cb) 11em 6em /3em 1em, linear-gradient(45deg, rgba(0,0,255,0) 0.7em, #00f 0.7em, #00f 2.83em, rgba(0,0,255,0) 2.83em) 10em 0 /4em 1em, linear-gradient(45deg, #00f 0.7em, rgba(0,0,255,0) 0.7em) 14em 1em/1em 1em, linear-gradient(45deg, rgba(0,0,255,0) 0.7em, #00f 0.7em, #00f 2.12em, rgba(0,0,255,0) 2.12em) 11em 2em /3em 1em, linear-gradient(45deg, #00f 0.7em, rgba(0,0,255,0) 0.7em) 14em 3em/1em 1em, linear-gradient(45deg, rgba(0,0,255,0) 0.7em, #00f 0.7em, #00f 2.12em, rgba(0,0,255,0) 2.12em) 11em 5em /3em 1em, linear-gradient(45deg, rgba(0,0,128,0) 0.7em, #000080 0.7em, #000080 5em, rgba(0,0,128,0) 5em) 10em 0/1em 7em, linear-gradient(#000080, #000080) 13em 2em/1em 4em, linear-gradient(#f0f 2em, #ffc0cb 4em) 16em 1em/1em 6em, linear-gradient(#f0f, #f0f) 16em 1em /4em 1em, linear-gradient(#f0f, #ffc0cb 2em) 16em 3em /3em 1em, linear-gradient(#ffc0cb, #ffc0cb) 16em 6em /4em 1em, linear-gradient(45deg, rgba(0,0,255,0) 0.7em, #00f 0.7em, #00f 3.55em, rgba(0,0,255,0) 3.55em) 15em 0 /5em 1em, linear-gradient(45deg, rgba(0,0,255,0) 0.7em, #00f 0.7em, #00f 2.12em, rgba(0,0,255,0) 2.12em) 16em 2em /3em 1em, linear-gradient(45deg, #00f 2.83em, rgba(0,0,255,0) 2.83em) 16em 5em /5em 1em, linear-gradient(45deg, rgba(0,0,128,0) 0.7em, #000080 0.7em, #000080 5em, rgba(0,0,128,0) 5em) 15em 0/1em 7em;
+  background-repeat: no-repeat;
+  transform: skewY(-12deg) scale(0.9);
+  transform-origin: 0 0;
+}
+#cubed_2 {
+  /* Change width and height to adjust the size of the object */
+  width: 200px;
+  height: 200px;
+
+  /* Change background color */
+  background-color: #ff0000; /* Red background */
+
+  /* Add border */
+  border: 2px solid #000; /* Black border */
+
+  /* Add border-radius for rounded corners */
+  border-radius: 10px;
+
+  /* Add box-shadow for a shadow effect */
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+
+  /* Add text styles */
+  color: #fff; /* White text color */
+  font-size: 24px; /* Font size */
+  text-align: center; /* Center align text */
+  line-height: 200px; /* Center vertically */
+}
+
+.sunken-input {
+  /* Add a border */
+  border: 1px solid #ccc;
+  
+  /* Add a box-shadow to create a sunken effect */
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  
+  /* Add a background color */
+  background-color: #f9f9f9; /* Light gray background */
+  
+  /* Add padding and margin for spacing */
+  padding: 8px;
+  margin: 4px;
+  
+  /* Set font properties */
+  font-size: 16px;
+  color: #333; /* Text color */
+}

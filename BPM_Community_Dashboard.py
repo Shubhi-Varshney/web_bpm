@@ -1,5 +1,6 @@
 #######################
 import streamlit as st
+# import streamlit_extras.bottom as ste
 import pandas as pd
 import altair as alt
 import plotly.express as px
@@ -27,9 +28,11 @@ df_analytics = pd.read_csv('/home/dhodal/code/Shubhi-Varshney/data-bpm/raw_data/
 df_line = pd.read_excel('/home/dhodal/code/Shubhi-Varshney/data-bpm/raw_data/Community Growth.xlsx', header = 1)
 
 ### GCS
+# Shubi updated file names: "cleaned_data_for_analysis.csv"
+# "cleaned_data_for_ml.csv"
 
 # https://console.cloud.google.com/storage/browser/bpm_bucket/cleaned_data_for_analysis.csv
-bucket_name = 'bpm_bucket'
+bucket_name = 'bpm_buckt'
 file_path_analytics = "cleaned_data_for_analysis.csv"
 file_path_ml = "cleaned_data_for_ml.csv"
 file_path_cg = "Community Growth.xlsx"
@@ -109,8 +112,8 @@ col = st.columns((3, 4, 2.5), gap='medium',)
 with col[0]:
     st.markdown('<span style="font-size: 30px; color: #383971;">Event Attendance</span>', unsafe_allow_html=True)
      #st.markdown("<h1 style='text-align: center; color: red;'>Some title</h1>", unsafe_allow_html=True)
-           
-    
+
+
     event_mask = df_analytics["Event"] == selected_event
     df_event_masked = df_analytics[event_mask]
     df_event_status = df_event_masked["Attendee Status"].value_counts()
@@ -140,7 +143,7 @@ with col[2]:
     fig_pie.update_layout(showlegend=True, title= dict(text =str("Role"), font =dict(family="source sans pro", size=20, color = '#383971')))
     fig_pie.update_traces(hoverinfo='label+percent',
                   marker=dict(colors=pie_colors, ))
-  
+
     st.plotly_chart(fig_pie, use_container_width=True,sharing="streamlit", )
 
 
@@ -200,7 +203,7 @@ with col[1]:
         tickvals=[0, 1, 2, 3, 4, 5, 6, 7],  # Positions of the ticks on the axis
         ticktext=months  # Labels for the ticks
 ))
-  
+
     st.plotly_chart(fig_line, use_container_width=True,)
     
 
@@ -256,7 +259,7 @@ with col[1]:
 #     st.plotly_chart(fig_san, use_container_width=True, sharing="streamlit",)
 
 
-    
+
 
 with col[0]:
     df_attendees = pd.DataFrame(df_reshaped["company"].value_counts().reset_index())
