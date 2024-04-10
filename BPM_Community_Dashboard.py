@@ -5,7 +5,11 @@ import altair as alt
 import plotly.express as px
 import plotly.graph_objects as go
 # import gcsfs
-
+import numpy as np
+import pandas as pd
+from os import path
+from PIL import Image
+from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
 
 #######################
 # Page configuration
@@ -25,6 +29,7 @@ alt.themes.enable("dark")
 # df_reshaped = pd.read_csv('/home/dhodal/code/Shubhi-Varshney/data-bpm/raw_data/cleaned_data_for_ml.csv')
 # df_analytics = pd.read_csv('/home/dhodal/code/Shubhi-Varshney/data-bpm/raw_data/data_for_analytics.csv')
 # df_line = pd.read_excel('/home/dhodal/code/Shubhi-Varshney/data-bpm/raw_data/Community Growth.xlsx', header = 1)
+# df_wordcloud = pd.read_csv('/home/dhodal/code/Shubhi-Varshney/data-bpm/raw_data/report-2024-04-10T1552.csv')
 
 ### GCS
 
@@ -34,7 +39,7 @@ bucket_name = 'bpm_buckt'
 file_path_analytics = "cleaned_data_for_analysis.csv"
 file_path_ml = "cleaned_data_for_ml.csv"
 file_path_cg = "Community Growth.xlsx"
-
+file_path_wc = "report-2024-04-10T1552.csv"
 
 @st.cache_data
 def load_csv(url):
@@ -50,12 +55,12 @@ def load_excel(url, header_num=0):
 df_gcs_an = load_csv(f'gs://{bucket_name}/{file_path_analytics}')
 df_gcs_ml = load_csv(f'gs://{bucket_name}/{file_path_ml}')
 df_gcs_cg = load_excel(f'gs://{bucket_name}/{file_path_cg}', header_num=1)
-
+df_gcs_wc = load_csv(f'gs://{bucket_name}/{file_path_wc}')
 
 df_analytics = df_gcs_an
 df_reshaped = df_gcs_ml
 df_line = df_gcs_cg
-
+df_wordcloud = df_gcs_wc
 
 #######################
 # Sidebar
@@ -84,7 +89,7 @@ with st.sidebar:
     with st.expander('About', expanded=False):
         st.write('''
                 Made with 🖤 from Berlin,\n
-    Shubhi Jain, Dominic Hodal, Yulia Vilensky
+    Shubhi Jain, Dominic Hodal, Yulia Vilensky & BPM team
                 ''')
 
 
@@ -204,8 +209,44 @@ with col[1]:
 
     st.plotly_chart(fig_line, use_container_width=True,)
     
+with col[1]:
+    st.markdown('<span style="font-size: 30px; color: #4778FF;">What did people expect?</span>', unsafe_allow_html=True)
+    
+    #Event mask
+    if selected_event > 5:
+        event_num = selected_event
+    else:
+        event_num = 6
+    
+    # Worldcloud event mask    
+    wc_mask = df_wordcloud["Event Name"].str.contains(f"{event_num}")
+    df_wc_masked = df_wordcloud[wc_mask]
 
+    #DF filtering
+    df_wc_filtered = df_wc_masked.filter(like='What are your expectations for the upcoming event?').fillna("PM")
 
+    # Text perparation
+    text = []
+    for column in df_wc_filtered:
+        text.append(" ".join(review for review in df_wc_filtered[column]))
+    text_joined = " ".join(review for review in text)
+
+    # Stopword list
+    stopwords = set(STOPWORDS)
+    stopwords.update(["product", "manager", "PM", "people", "PMs", "products", "managers", "something", "learn", "network"])
+
+    # Generate a word cloud image
+    wordcloud = WordCloud(stopwords=stopwords, background_color="white").generate(text_joined)
+    # Display the generated image:
+    fig_wc, ax = plt.subplots()
+    ax.scatter([1, 2, 3], [1, 2, 3])
+    plt.imshow(wordcloud, interpolation='bilinear')
+    plt.axis("off")
+    plt.show()
+
+    st.pyplot(fig_wc)
+    
+    
 # with col[1]:
     
 #     #Sankey graph
